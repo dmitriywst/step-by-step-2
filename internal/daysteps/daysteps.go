@@ -1,6 +1,7 @@
 package daysteps
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -19,19 +20,25 @@ type DaySteps struct {
 func (ds *DaySteps) Parse(datastring string) (err error) {
 	result := strings.SplitN(datastring, ",", 2)
 	if len(result) != 2 {
-		return fmt.Errorf("Неверный формат полученных данных")
+		return fmt.Errorf("неверный формат шагов: %w", err)
 	}
 	ds.Steps, err = strconv.Atoi(result[0])
 	if err != nil {
-		return fmt.Errorf("Неверный формат полученных данных")
+		return fmt.Errorf("неверный формат шагов: %w", err)
+	}
+	if ds.Steps <= 0 {
+		return errors.New("количество шагов должно быть больше нуля")
 	}
 
 	ds.Duration, err = time.ParseDuration(result[1])
 	if err != nil {
-		return fmt.Errorf("Неверный формат полученных данных")
+		return fmt.Errorf("неверный формат шагов: %w", err)
+	}
+	if ds.Duration <= 0 {
+		return errors.New("длительность должна быть больше нуля")
 	}
 
-	return fmt.Errorf("Неверный формат полученных данных")
+	return nil
 
 }
 

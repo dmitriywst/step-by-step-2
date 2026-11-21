@@ -22,21 +22,28 @@ type Training struct {
 func (t *Training) Parse(datastring string) (err error) {
 	result := strings.SplitN(datastring, ",", 3)
 	if len(result) != 3 {
-		return fmt.Errorf("Неверный формат полученных данных")
+		return errors.New("неверный формат полученных данных")
 	}
+
 	t.Steps, err = strconv.Atoi(result[0])
 	if err != nil {
-		return fmt.Errorf("Неверный формат полученных данных")
+		return fmt.Errorf("неверный формат шагов: %w", err)
+	}
+	if t.Steps <= 0 {
+		return errors.New("количество шагов должно быть больше нуля")
 	}
 
 	t.TrainingType = result[1]
 
 	t.Duration, err = time.ParseDuration(result[2])
 	if err != nil {
-		return fmt.Errorf("Неверный формат полученных данных")
+		return fmt.Errorf("неверный формат длительности: %w", err)
+	}
+	if t.Duration <= 0 {
+		return errors.New("длительность должна быть больше нуля")
 	}
 
-	return fmt.Errorf("Неверный формат полученных данных")
+	return nil
 }
 
 func (t Training) ActionInfo() (string, error) {
