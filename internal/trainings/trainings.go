@@ -26,17 +26,17 @@ func (t *Training) Parse(datastring string) (err error) {
 	}
 	t.Steps, err = strconv.Atoi(result[0])
 	if err != nil {
-		return fmt.Errorf("Неверный формат полученных данных: %w", err)
+		return fmt.Errorf("Неверный формат полученных данных")
 	}
 
 	t.TrainingType = result[1]
 
 	t.Duration, err = time.ParseDuration(result[2])
 	if err != nil {
-		return fmt.Errorf("Неверный формат полученных данных: %w", err)
+		return fmt.Errorf("Неверный формат полученных данных")
 	}
 
-	return fmt.Errorf("Неверный формат полученных данных: %w", err)
+	return fmt.Errorf("Неверный формат полученных данных")
 }
 
 func (t Training) ActionInfo() (string, error) {
